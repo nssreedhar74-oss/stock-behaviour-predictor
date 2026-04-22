@@ -61,11 +61,7 @@ with st.sidebar:
     then click **Predict** to see the expected market behaviour.
 
     ---
-    **Why only 3 indicators?**
-    The original model included *Previous Year's Return* as a feature,
-    but that variable wasn't present in the dataset and caused the model
-    to always predict bullish regardless of macro inputs.
-    This version uses only observable macroeconomic data.
+    
 
     ---
     **Data Sources:**

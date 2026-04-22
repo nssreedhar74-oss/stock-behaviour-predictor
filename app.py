@@ -2,51 +2,32 @@ import streamlit as st
 import numpy as np
 import pickle
 
-# Page config
-st.set_page_config(page_title="Stock Predictor", page_icon="📈", layout="centered")
-
 # Load model
 model = pickle.load(open('model.pkl', 'rb'))
 
-# Custom styling
-st.markdown("""
-    <style>
-    .main {
-        background-color: #0e1117;
-    }
-    h1 {
-        color: #00ffcc;
-        text-align: center;
-    }
-    </style>
-""", unsafe_allow_html=True)
+# Page config
+st.set_page_config(page_title="Stock Predictor", page_icon="📈")
 
-# Title
 st.title("📈 Stock Market Prediction App")
 
-st.markdown("### 🔍 Predict market behavior using macroeconomic indicators")
+st.write("Predict stock market returns using macroeconomic indicators")
 
-# Layout in columns
-col1, col2 = st.columns(2)
+# Inputs
+inflation = st.number_input("Inflation (%)", value=6.0)
+gdp = st.number_input("GDP Growth (%)", value=6.5)
+interest = st.number_input("Interest Rate (%)", value=6.0)
 
-with col1:
-    inflation = st.number_input("Inflation (%)", value=6.0)
-    gdp = st.number_input("GDP Growth (%)", value=6.5)
+# 🔥 Auto return lag (fixed value)
+return_lag = 0.10   # 10% (you can change slightly if needed)
 
-with col2:
-    interest = st.number_input("Interest Rate (%)", value=6.0)
-    return_lag = st.number_input("Previous Year Return (%)", value=10.0)
+st.info("Using previous year's average market return internally")
 
-st.markdown("---")
-
-# Predict button
-if st.button("🚀 Predict Market"):
+# Predict
+if st.button("Predict"):
     input_data = np.array([[inflation, gdp, interest, return_lag]])
     prediction = model.predict(input_data)[0]
 
-    st.markdown("## 📊 Prediction Result")
-
-    st.metric(label="Predicted Return", value=f"{prediction:.2f}%")
+    st.subheader(f"Predicted Return: {prediction*100:.2f}%")
 
     if prediction > 0:
         st.success("📈 Bullish Market Expected")
